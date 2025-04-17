@@ -85,7 +85,7 @@ def h1(src):
             va ^= va >> 18
             va = imul(va, 0x85ebca6b)
             va ^= va >> 13
-            mo = imul(va, 0xc2b2ae35)
+            va = imul(va, 0xc2b2ae35)
             va ^= va >> 18
             
 
