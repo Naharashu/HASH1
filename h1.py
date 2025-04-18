@@ -17,7 +17,7 @@ def h1(src):
     
     t = 0
 
-    while t < 5:
+    while t < 32:
         i = 0
         while i < len(src):
             nextChar = ord(src[i + 1]) if (i + 1 < len(src)) else 0
@@ -60,9 +60,14 @@ def h1(src):
                 mo = ((hi << 27) | (mo >> 5)) & 0xFFFFFFFF
             
             if (va & (1 << bitPos)):
-                va = ((va << 5) | (va >> 27)) & 0xFFFFFFFF
+                va = ((va << 5) | (va >> 23)) & 0xFFFFFFFF
             else:
-                va = ((mo << 27) | (va >> 5)) & 0xFFFFFFFF
+                va = ((mo << 23) | (va >> 5)) & 0xFFFFFFFF
+                
+            mo ^= (hi * lo) & 0xFFFFFFFF
+            lo ^= (va * mo) & 0xFFFFFFFF
+            hi ^= (va * lo) & 0xFFFFFFFF
+            va ^= (mo * va) & 0xFFFFFFFF
 
             hi ^= hi >> 16
             hi = imul(hi, 0x85ebca6b)
@@ -98,4 +103,3 @@ def h1(src):
         t += 1
 
     return hex(hi)[2:].zfill(8) + hex(lo)[2:].zfill(8) + hex(mo)[2:].zfill(8) + hex(va)[2:].zfill(8)
-
